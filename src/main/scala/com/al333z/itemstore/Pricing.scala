@@ -12,12 +12,7 @@ object Pricing {
 
   case class Pricings(each: Each, perVolumes: List[PerVolume] = Nil)
 
-  implicit val orderInstance: Order[Pricing] = Order.fromLessThan[Pricing] { (a, b) =>
-    (a, b) match {
-      case (Each(_), PerVolume(_, _))           => true
-      case (PerVolume(_, _), Each(_))           => false
-      case (Each(_), Each(_))                   => false
-      case (PerVolume(va, _), PerVolume(vb, _)) => va < vb
-    }
+  implicit val orderInstance: Order[PerVolume] = Order.fromLessThan[PerVolume] { (a, b) =>
+    a.volume < b.volume
   }
 }
