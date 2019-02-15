@@ -9,6 +9,7 @@ scalacOptions += "-Ypartial-unification"
 libraryDependencies += "org.typelevel" %% "cats-core" % "1.6.0"
 libraryDependencies += "org.typelevel" %% "cats-mtl-core" % "0.4.0"
 libraryDependencies += "org.typelevel" %% "cats-effect" % "1.2.0"
+libraryDependencies += "com.github.gvolpe" %% "console4cats" % "0.6.0"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 

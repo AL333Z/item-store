@@ -1,6 +1,6 @@
 package com.al333z.itemstore
 
-import cats.Monoid
+import cats.{ Monoid, Show }
 import cats.implicits._
 import com.al333z.itemstore.Pricing.{ Pricings, _ }
 
@@ -14,6 +14,8 @@ object Price {
     override def empty: Price                       = zero
     override def combine(x: Price, y: Price): Price = Price(x.amount + y.amount)
   }
+
+  implicit val showPrice: Show[Price] = Show.fromToString[Price]
 
 }
 
