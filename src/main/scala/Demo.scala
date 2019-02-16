@@ -6,29 +6,29 @@ import com.al333z.itemstore.{ Item, ItemStore, Price, Prices }
 
 object Demo extends IOApp {
 
-  val store: ItemStore = setup()
-
   override def run(args: List[String]): IO[ExitCode] =
     for {
-      items <- getItems
-      price = store.compute(items)
+      store <- initItemStore
+      _     <- scanItems(store)
+      price <- store.result
       _     <- putStrLn(s"Total: ${price.show}")
     } yield ExitCode.Success
 
-  private def getItems: IO[List[Item]] = {
-    def go(acc: List[Item]): IO[List[Item]] =
-      for {
-        _    <- putStrLn("Enter next item (\"A\", \"B\", \"C\" or \"D\"), or \"done\" to complete")
-        next <- readLn
-        res <- if (next == "done") IO.pure(acc)
-              else go(acc :+ Item(next))
-      } yield res
+  private def scanItems(store: ItemStore): IO[Unit] =
+    for {
+      _    <- putStrLn("Enter next item (\"A\", \"B\", \"C\" or \"D\"), or \"done\" to complete")
+      next <- readLn
+      res <- if (next == "done")
+              IO.pure(())
+            else
+              store
+                .scan(next)
+                .recoverWith { case t => putError(t.getMessage) }
+                .*>(scanItems(store))
+    } yield res
 
-    go(Nil)
-  }
-
-  private def setup(): ItemStore =
-    new ItemStore(
+  private def initItemStore: IO[ItemStore] =
+    ItemStore.fromPrices(
       Prices.from(
         Map(
           Item("A") -> Pricings(Each(Price(2)), List(PerVolume(4, Price(7)))),

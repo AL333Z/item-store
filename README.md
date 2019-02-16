@@ -34,3 +34,8 @@ Here are the minimal inputs you should use for your test cases.
 
 ### How to run unit tests
 `sbt test`
+
+### Notes
+Purely functional solution, using `cats`, `cats-effect` and `console4cats` libs.
+State is handled and mutated safely with `Ref`.
+A sample `Demo` application is provided.
